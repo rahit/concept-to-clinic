@@ -4,7 +4,7 @@ from backend.cases.models import (
     Candidate,
     Nodule,
 )
-from rest_framework.views import APIView 
+from rest_framework.views import APIView
 from backend.images.models import ImageSeries
 from django.http import JsonResponse
 from rest_framework import viewsets
