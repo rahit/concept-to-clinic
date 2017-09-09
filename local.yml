@@ -29,6 +29,7 @@ services:
       - ./interface/:/app
       - ./tests/assets/test_image_data/small:/images
       - ./.git/logs/HEAD:/HEAD
+      - ./prediction/src/algorithms/classify/assets/:/classify_models
     ports:
       - "8000:8000"
 
@@ -43,6 +44,7 @@ services:
     volumes:
       - ./prediction/:/app
       - ./tests/assets/test_image_data/small:/images
+      - ./prediction/src/algorithms/classify/assets/:/classify_models
     ports:
       - "8001:8001"
 
