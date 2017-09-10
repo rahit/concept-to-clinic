@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 from backend.api import serializers
 from backend.cases.models import (
     Case,
@@ -52,22 +53,17 @@ class ImageAvailableApiView(APIView):
         
         TODO Dynamically fetch deeper directories
         """
-        # example source:
-        # /images/LIDC-IDRI-0001/1.3.6.1.4.1.14519.5.2.1.6279.6001.298806137288633453246975630178
-        src_dir = os.environ.get('IMAGE_SOURCE', '/images')
+        src_dir = settings.DATASOURCE_DIR
         fss = FileSystemStorage(src_dir)
         list_dirs = fss.listdir(src_dir)
-        dirs = sorted(list_dirs[0])
         tree = []
-        if dirs:
-            for dirname in dirs:
-                dir_contents = fss.listdir(os.path.join(src_dir, dirname))
-                filenames = sorted(dir_contents[1])
-                dir_node = {
-                    'name': dirname,
-                    'children': filenames
-                }   
-                tree.append(dir_node)
+        for dirname in sorted(list_dirs[0]):
+            dir_contents = fss.listdir(os.path.join(src_dir, dirname))
+            dir_node = {
+                'name': dirname,
+                'children': sorted(dir_contents[1]),
+            }   
+            tree.append(dir_node)
         return JsonResponse({'directories': tree})
 
 
