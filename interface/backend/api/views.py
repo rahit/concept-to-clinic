@@ -11,7 +11,6 @@ from rest_framework.response import Response
 from backend.images.models import ImageSeries
 from django.http import JsonResponse
 from rest_framework import viewsets
-from rest_framework.views import APIView
 from django.core.files.storage import FileSystemStorage
 
 

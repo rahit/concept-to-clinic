@@ -15,7 +15,8 @@ BASE_DIR = environ.Path(__file__) - 3
 APPS_DIR = BASE_DIR.path('backend')
 
 # Datasource from where the images will be loaded initially
-DATASOURCE_DIR = "/images/LIDC-IDRI-0001/1.3.6.1.4.1.14519.5.2.1.6279.6001.298806137288633453246975630178"
+DATASOURCE_DIR = '/images/LIDC-IDRI-0001/' \
+                '1.3.6.1.4.1.14519.5.2.1.6279.6001.298806137288633453246975630178'
 
 env = environ.Env()
 env.read_env(str(BASE_DIR.path('.env')))
