@@ -42,15 +42,14 @@ class ImageAvailableApiView(APIView):
 
     def get(self, request):
         """
-        Return a sorted(by name) list of files and folders 
+        Return a sorted(by name) list of files and folders
         in dataset in the form
         {'directories': [
             {
                 'name': directory_name1,
                 'children': [ file_name1, file_name2, ... ]
             }, ... ]
-        }
-        
+        }        
         TODO Dynamically fetch deeper directories
         """
         src_dir = settings.DATASOURCE_DIR
@@ -62,7 +61,7 @@ class ImageAvailableApiView(APIView):
             dir_node = {
                 'name': dirname,
                 'children': sorted(dir_contents[1]),
-            }   
+            }
             tree.append(dir_node)
         return JsonResponse({'directories': tree})
 
