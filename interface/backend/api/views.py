@@ -39,6 +39,24 @@ class ImageAvailableApiView(APIView):
     View list of images from dataset directory
     """
 
+    def __init__(self, *args, **kwargs):
+        super(ImageAvailableApiView, self).__init__(**kwargs)
+        self.fss = FileSystemStorage(settings.DATASOURCE_DIR)
+
+    def walk(self, location, dir_name='root'):
+        """
+        Recursively walkthrough directories and files
+        """
+        list_dirs = self.fss.listdir(location)
+        tree = {
+            'name': dir_name,
+            'children': [],
+        }
+        tree['children'] = sorted(list_dirs[1])
+        for dirname in sorted(list_dirs[0]):
+            tree['children'].append(self.walk(os.path.join(location, dirname), dirname))
+        return tree
+
     def get(self, request):
         """
         Return a sorted(by name) list of files and folders
@@ -46,22 +64,22 @@ class ImageAvailableApiView(APIView):
         {'directories': [
             {
                 'name': directory_name1,
-                'children': [ file_name1, file_name2, ... ]
+                'children': [
+                    file_name1,
+                    file_name2,
+                    {
+                        'name': 'nested_dir_1',
+                        'children': [
+                            'file_name_1',
+                            'file_name_2',
+                            ....
+                        ]
+                    }
+                    ... ]
             }, ... ]
-        }        
-        TODO Dynamically fetch deeper directories
+        }
         """
-        src_dir = settings.DATASOURCE_DIR
-        fss = FileSystemStorage(src_dir)
-        list_dirs = fss.listdir(src_dir)
-        tree = []
-        for dirname in sorted(list_dirs[0]):
-            dir_contents = fss.listdir(os.path.join(src_dir, dirname))
-            dir_node = {
-                'name': dirname,
-                'children': sorted(dir_contents[1]),
-            }
-            tree.append(dir_node)
+        tree = self.walk(settings.DATASOURCE_DIR)
         return JsonResponse({'directories': tree})
 
 
